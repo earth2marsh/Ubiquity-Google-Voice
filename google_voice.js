@@ -199,7 +199,7 @@ CmdUtils.CreateCommand({
     }
     else
        message = message + "<b>Error:</b> no Google Voice key set. <i>Log in to <a href='http://google.com/voice'>Google Voice</a> and then use the 'google voice setkey' command.</i><br />";
-    pb.innerHTML = message + "<br />Need help? Try the <i><a href='http://earth2marsh.com/ubiquity/googlevoice'>Troubleshooting steps</a></i>";
+    pb.innerHTML = message + "<br />Need help? Check that you're logged into Google Voice, then follow the <i><a href='http://earth2marsh.com/ubiquity/googlevoice'>troubleshooting steps</a>.</i>";
   },
 
   execute: function({object: {text}}) {
