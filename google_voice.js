@@ -1,7 +1,7 @@
 /* 
 * For calling Google Voice numbers
 * Version 0.3.1
-* See: http://earth2marsh.com/ubiquity/googlevoice 207-321-appl
+* See: http://earth2marsh.com/ubiquity/googlevoice
 */
 
 var noun_type_googlevoiceconfig = {
