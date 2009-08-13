@@ -1,12 +1,13 @@
 /* 
 * For calling Google Voice numbers
-* Version 0.3
+* Version 0.3.1 2077754321
+* See: http://earth2marsh.com/ubiquity/googlevoice 207-321-appl
 */
 
 var noun_type_googlevoiceconfig = {
     _name: "google voice config",
     
-    hasKey: function(key) {
+    hasKey: function() {
         return Application.prefs.has("google_voice_key");
     },
     
@@ -36,7 +37,7 @@ var noun_type_googlevoiceconfig = {
         }
     },
 
-    hasPhone: function(phone) {
+    hasPhone: function() {
         return Application.prefs.has("google_voice_phone");
     },
     
@@ -69,17 +70,17 @@ CmdUtils.CreateCommand({
                nountype: noun_arb_text,
                label: "number to call"}],
   description: "Calls a selected/entered number using Google Voice. You must be logged into Google Voice and have configured the Ubiquity command with the 'google voice setkey' and 'google voice setphone' commands. For numbers other than 10 digits, be sure to include the country code.",
-  author: {name: "earth2marsh", email: "marsh.gardiner@gmail.com"},
+  author: {name: "earth2marsh", email: "ubiquity@earth2marsh.com"},
   license: "MIT",
 
   preview: function(pb, {object: {text}}) {
-     var gvkey = noun_type_googlevoiceconfig.getKey();
-     if (gvkey) {
+
+     if (noun_type_googlevoiceconfig.hasKey()) {
+           var gvkey = noun_type_googlevoiceconfig.getKey();
            pb.innerHTML = (text
-                    ? (<><b>Calling:</b> 
-                      {formatNumber(cleanNumber(text))}<br /><br />
+                    ? (<><b>Calling:</b> {formatNumber(cleanNumber(text))}<br /><br />
                       <b>From:</b> {formatNumber(noun_type_googlevoiceconfig.getPhone())}<br /><br /><br />
-                      <i><b>Having trouble?</b></i><ol><li>Check that you are logged in to <a href="http://google.com/voice">Google Voice</a></li><li>then verify your configuration with 'google voice configcheck'.</li></ol> </>)
+                      <i><b>Having trouble?</b></i><ol><li>Check that you are logged in to <a href='http://google.com/voice'>Google Voice</a></li><li>then verify your configuration with 'google voice configcheck'.</li></ol> </>)
                     : this.description);
      }
      else
@@ -87,12 +88,12 @@ CmdUtils.CreateCommand({
   },
 
   execute: function({object: {text}}) {
-     var gvkey = noun_type_googlevoiceconfig.getKey();
      var tocall = cleanNumber(text);
      var prefix = "";
      if (tocall.length == 10)
         prefix = "+1";
-     if (gvkey) {
+     if (noun_type_googlevoiceconfig.hasKey()) {
+          var gvkey = noun_type_googlevoiceconfig.getKey();
           //need to do error checking on number
           jQuery.post("https://www.google.com/voice/m/sendcall", { _rnr_se: gvkey, number: prefix+tocall, phone: '+1'+noun_type_googlevoiceconfig.getPhone()} );
           displayMessage(_("Calling: "+formatNumber(tocall)+" With: "+formatNumber(noun_type_googlevoiceconfig.getPhone())));
@@ -109,7 +110,7 @@ CmdUtils.CreateCommand({
                nountype: noun_arb_text,
                label: "Your phone number ###-###-####."}],
   description: "Google Voice will call you at this number.",
-  author: {name: "earth2marsh", email: "marsh.gardiner@gmail.com"},
+  author: {name: "earth2marsh", email: "ubiquity@earth2marsh.com"},
   license: "MIT",
 
   preview: function(pb, {object: {text}}) {
@@ -136,7 +137,7 @@ CmdUtils.CreateCommand({
                nountype: noun_arb_text,
                label: "Finds and stores your Google Voice key."}],
   description: "You must already be logged in to Google Voice!",
-  author: {name: "earth2marsh", email: "marsh.gardiner@gmail.com"},
+  author: {name: "earth2marsh", email: "ubiquity@earth2marsh.com"},
   license: "MIT",
 
   preview: function(pb, {object: {text}}) {
@@ -181,19 +182,21 @@ CmdUtils.CreateCommand({
                nountype: noun_arb_text,
                label: "Displays configuration information."}],
   description: "Displays Google Voice command configuration information.",
-  author: {name: "earth2marsh", email: "marsh.gardiner@gmail.com"},
+  author: {name: "earth2marsh", email: "ubiquity@earth2marsh.com"},
   license: "MIT",
 
   preview: function(pb, {object: {text}}) {
-    var yourphone = noun_type_googlevoiceconfig.getPhone();
-    var yourkey = noun_type_googlevoiceconfig.getKey();
     var message = "";
-    if (yourphone)
-       message = "<b>Will call you at:</b> "+formatNumber(yourphone)+"<br /><i>use 'google voice setphone' to change</i><br /><br />";
+    if (noun_type_googlevoiceconfig.hasPhone()) {
+       var yourphone = noun_type_googlevoiceconfig.getPhone();
+       message = "<b>Calls you at:</b> "+formatNumber(yourphone)+"<br /><i>use 'google voice setphone' to change</i><br /><br />";
+    }
     else
        message = "<b>Error:</b> you have not set a number for receiving calls. Use 'google voice setphone'.<br /><br />";
-    if (yourkey)
+    if (noun_type_googlevoiceconfig.hasKey()) {
+       var yourkey = noun_type_googlevoiceconfig.getKey();
        message = message + "<b>Your key is:</b> "+yourkey+"<br /><i>to reset, log in to <a href='http://google.com/voice'>Google Voice</a> and use the 'google voice setkey' command</i><br />";
+    }
     else
        message = message + "<b>Error:</b> no Google Voice key set. <i>Log in to <a href='http://google.com/voice'>Google Voice</a> and then use the 'google voice setkey' command.</i><br />";
     pb.innerHTML = message + "<br />Need help? Try the <i><a href='http://earth2marsh.com/ubiquity/googlevoice'>Troubleshooting steps</a></i>";
