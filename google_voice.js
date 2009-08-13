@@ -1,6 +1,6 @@
 /* 
 * For calling Google Voice numbers
-* Version 0.3.1 2077754321
+* Version 0.3.1
 * See: http://earth2marsh.com/ubiquity/googlevoice 207-321-appl
 */
 
