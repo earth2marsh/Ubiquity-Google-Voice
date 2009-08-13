@@ -1,0 +1,9 @@
+Verison 0.3
+* Added configcheck command
+* setkey command auto-discovers key (must be logged in to Google Voice)
+* Better number formatting
+* Should be able to call non-US numbers (will incur charges)
+* Moved command to GitHub
+
+Version 0.2
+* Converts letters to numbers, e.g. 800-GO-CEDAR
